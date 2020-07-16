@@ -1,6 +1,5 @@
 (ns clj-nvd.core
-  (:require [clojure.java.io :as io]
-            [clojure.string :as string]
+  (:require [clojure.string :as string]
             [clojure.tools.cli :as cli]
             [clojure.tools.deps.alpha :as deps]
             [clojure.tools.deps.alpha.reader :as deps.reader]
@@ -51,6 +50,5 @@
       (do
         (.println *err* (string/join \newline errors))
         (System/exit 1))
-
-      true
+      :else
       (run-nvd (:aliases options) (first arguments) (rest arguments)))))
