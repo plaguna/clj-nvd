@@ -17,7 +17,7 @@
 (defn parse-aliases [alias-str]
   (map keyword (string/split alias-str #":")))
 
-(def +cli-options+
+(def cli-options
   [["-A" nil "Colon-separated list of deps.edn aliases"
     :id :aliases
     :required "ALIASES"
@@ -44,7 +44,7 @@
         (System/exit 1)))))
 
 (defn -main [& args]
-  (let [{:keys [options arguments errors]} (cli/parse-opts args +cli-options+)]
+  (let [{:keys [options arguments errors]} (cli/parse-opts args cli-options)]
     (cond
       errors
       (do
