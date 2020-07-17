@@ -21,17 +21,17 @@
   [["-A" nil "Colon-separated list of deps.edn aliases"
     :id :aliases
     :required "ALIASES"
-    :parse-fn parse-aliases]])
+    :parse-fn parse-aliases]
+   ["-c" "--config-file FILE" "Config file location"
+    :id :config-file
+    :required "CONFIG"
+    :default "clj-nvd.edn"]])
 
-(defn run-nvd [aliases command args]
-  (let [config (try
-                 (read-string (slurp "clj-nvd.edn"))
-                 (catch java.io.FileNotFoundException _
-                   nil))
-        temp-file (java.io.File/createTempFile "clj-nvd" ".json")
+(defn run-nvd [options command args]
+  (let [temp-file (java.io.File/createTempFile "clj-nvd" ".json")
         path (.getAbsolutePath temp-file)
-        classpath (make-classpath aliases)
-        opts {:nvd       config
+        classpath (make-classpath (get options :aliases))
+        opts {:nvd       (get options :config-file)
               :classpath classpath
               :cmd-args  args}]
     (spit path (json/write-value-as-string opts))
@@ -51,4 +51,4 @@
         (.println *err* (string/join \newline errors))
         (System/exit 1))
       :else
-      (run-nvd (:aliases options) (first arguments) (rest arguments)))))
+      (run-nvd (:options options) (first arguments) (rest arguments)))))
